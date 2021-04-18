@@ -9,9 +9,9 @@ struct ListNode {
 class Solution {
 public:
     ListNode* removeNthFromEnd(ListNode* head, int n) {
-        ListNode dummy = ListNode(0, head);
-        ListNode* first = &dummy;
-        ListNode* second = &dummy;
+        ListNode* dummy = new ListNode(0, head);
+        ListNode* first = dummy;
+        ListNode* second = dummy;
         while (first && n >= 0) {
             first = first->next;
             n--;
@@ -21,6 +21,6 @@ public:
             second = second->next;
         }
         second->next = second->next->next;
-        return dummy.next;
+        return dummy->next;
     }
 };
