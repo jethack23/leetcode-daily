@@ -7,7 +7,7 @@ class Solution:
         heap = []
         ret = 0
         # sum of speeds
-        ss = 0 
+        ss = 0
         for s, e in engineers:
             if len(heap) >= k:
                 ss -= heapq.heappop(heap)
