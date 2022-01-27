@@ -8,14 +8,15 @@
   
   (defn add [self stack]
     (when stack
-      (setv next-d (stack.pop))
-      (cond [(and next-d (not self.one))
-             (setv self.one (TRIE (+ (* 2 self.val) next-d)))]
-            [(and (not next-d) (not self.zero))
-             (setv self.zero (TRIE (+ (* 2 self.val) next-d)))])
-      (if next-d
-          (self.one.add stack)
-          (self.zero.add stack))
+      (setv next-d (stack.pop)
+            next-node (cond [(and next-d self.one) self.one]
+                            [(and (not next-d) self.zero) self.zero]
+                            [True (do (setv new-node (TRIE (+ (* 2 self.val) next-d)))
+                                      (if next-d
+                                          (setv self.one new-node)
+                                          (setv self.zero new-node))
+                                      new-node)]))
+      (next-node.add stack)
       (stack.append next-d)))
 
   (defn best-choice [self stack]
