@@ -4,31 +4,20 @@
 
 (defclass Solution []
   (defn removeKdigits [self num k]
-    (setv rst (deque)
-          mem (deque)
-          cnt (* [0] 10))
+    (setv rst [])
     (for [d num]
-      (setv d (int d))
-      (mem.append d)
-      (if (not k) (continue))
-      (+= (get cnt d) 1)
-      (when (> (len mem) k)
-        (setv m ((fn [lst] (for [[i v] (enumerate lst)] (if v (return i)))) cnt))
-        (while True
-          (setv p (mem.popleft))
-          (-= (get cnt p) 1)
-          (if (= p m)
-              (break)
-              (-= k 1)))
-        (rst.append p)))
-    (while k
-      (mem.pop)
-      (-= k 1))
-    (setv rst (+ rst mem))
-    (while (and rst (= 0 (get rst 0)))
-      (rst.popleft))
+      (while (and k rst (> (get rst -1) d))
+        (rst.pop)
+        (-= k 1))
+      (rst.append d))
+    (setv leading0 0)
+    (for [[i v] (enumerate rst)]
+      (if (= v "0")
+          (+= leading0 1)
+          (break)))
+    (setv rst (.join "" (get rst (slice leading0 (- (len rst) k)))))
     (if rst
-        (.join "" (map str rst))
+        rst
         "0")))
 
 
