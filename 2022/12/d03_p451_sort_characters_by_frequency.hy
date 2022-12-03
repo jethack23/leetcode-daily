@@ -9,9 +9,8 @@
     (sol s)))
 
 (defn sol [s]
-  (reduce (fn [x y] (+ x y))
-          (map (fn [x]
-                 (.join "" (* [(get x 0)] (get x 1))))
-               (.most_common (Counter s)))))
+  (reduce (fn [x y] (+ x (* (get y 0) (get y 1))))
+          (.most_common (Counter s))
+          ""))
 
 (sol "tree")
