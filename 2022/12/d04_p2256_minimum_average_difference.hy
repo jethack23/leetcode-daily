@@ -20,7 +20,7 @@
             (round-down (avg rsum (- totalnum lnum)))))
 
 (defn avg [sumx n]
-  (if (= sumx 0) 0 (/ sumx n)))
+  (if (= n 0) 0 (/ sumx n)))
 
 (defn abs-diff [x y]
   (abs (- x y)))
