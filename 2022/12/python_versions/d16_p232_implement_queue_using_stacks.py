@@ -5,16 +5,19 @@ class MyQueue:
         return None
 
     def push(self, x):
-        self.pushmode()
+        if not self.pushmem:
+            self.pushtop = x
+            _hy_anon_var_1 = None
+        else:
+            _hy_anon_var_1 = None
         return self.pushmem.append(x)
 
     def pop(self):
-        self.popmode()
+        self.popmode() if not self.popmem else None
         return self.popmem.pop()
 
     def peek(self):
-        self.popmode()
-        return self.popmem[-1]
+        return self.popmem[-1] if self.popmem else self.pushtop
 
     def empty(self):
         return not (self.pushmem or self.popmem)

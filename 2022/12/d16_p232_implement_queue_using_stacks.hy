@@ -7,16 +7,19 @@
     None)
 
   (defn push [self x]
-    (self.pushmode)
+    (when (not self.pushmem)
+      (setv self.pushtop x))
     (self.pushmem.append x))
 
   (defn pop [self]
-    (self.popmode)
+    (when (not self.popmem)
+      (self.popmode))
     (self.popmem.pop))
 
   (defn peek [self]
-    (self.popmode)
-    (get self.popmem -1))
+    (if self.popmem
+        (get self.popmem -1)
+        self.pushtop))
 
   (defn empty [self]
     (not (or self.pushmem
