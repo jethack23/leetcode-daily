@@ -10,18 +10,18 @@ def sol(rpn):
     def recur(q, mem):
         return recur(q, process_token(q.popleft(), mem)) if q else mem.pop()
 
+    ops = {
+        "+": lambda y, x: x + y,
+        "-": lambda y, x: x - y,
+        "/": div,
+        "*": lambda y, x: x * y,
+    }
+
+    def process_token(t, mem):
+        proc_op(ops[t], mem) if t in ops else mem.append(int(t))
+        return mem
+
     return recur(deque(rpn), [])
-
-
-def process_token(t, mem):
-    proc_op(lambda y, x: x + y, mem) if t == "+" else proc_op(
-        lambda y, x: x - y, mem
-    ) if t == "-" else proc_op(div, mem) if t == "/" else proc_op(
-        lambda y, x: x * y, mem
-    ) if t == "*" else mem.append(
-        int(t)
-    ) if True else None
-    return mem
 
 
 def div(y, x):

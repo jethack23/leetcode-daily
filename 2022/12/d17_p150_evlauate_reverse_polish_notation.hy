@@ -11,15 +11,18 @@
     (if q
         (recur q (process-token (q.popleft) mem))
         (mem.pop)))
-  (recur (deque rpn) []))
 
-(defn process-token [t mem]
-  (cond (= t "+") (proc-op (fn [y x] (+ x y)) mem)
-        (= t "-") (proc-op (fn [y x] (- x y)) mem)
-        (= t "/") (proc-op div mem)
-        (= t "*") (proc-op (fn [y x] (* x y)) mem)
-        True (mem.append (int t)))
-  mem)
+  (setv ops {"+" (fn [y x] (+ x y))
+             "-" (fn [y x] (- x y))
+             "/" div
+             "*" (fn [y x] (* x y))})
+  (defn process-token [t mem]
+    (if (in t ops)
+        (proc-op (get ops t) mem)
+        (mem.append (int t)))
+    mem)
+  
+  (recur (deque rpn) []))
 
 (defn div [y x]
   (* (sgn x) (sgn y) (// (abs x) (abs y))))
