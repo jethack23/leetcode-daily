@@ -18,13 +18,14 @@
   (with [f (open new-path "r")]
     (setv lines (deque (f.readlines))))
   (with [f (open new-path "w")]
-    (while (in (get lines 0) (set ["import hy\n" "\n"]))
+    (while (not (.startswith (get lines 0) "class"))
       (lines.popleft))
     (for [line lines]
       (f.write line)))
   (os.system f"black {new-path}")
   (print "\n\n")
   (os.system f"cat {new-path}")
+  (print "\n\n")
   0)
 
 (defmain []
