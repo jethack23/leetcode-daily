@@ -3,31 +3,39 @@ class Solution:
         return sol(n, dislikes)
 
 
-def sol(n, edges):
-    return not find_odd_cycle(n, edges)
+def sol(n, dislikes):
+    return is_bi_partite(n, dislikes)
 
 
-def find_odd_cycle(n, edges):
+def is_bi_partite(n, edges):
     colors = dict()
     graph = edge_list_to_dict(edges)
 
-    def recur(node, previous_color=True):
+    def is_only_even_cycles(node, color=True):
+        if node in colors:
+            _hy_anon_var_1 = colors[node] == color
+        else:
+            colors[node] = color
+            _hy_anon_var_1 = recur_call_with_early_stopping(
+                deque(graph[node]), not color
+            )
+        return _hy_anon_var_1
+
+    def recur_call_with_early_stopping(q, color):
         return (
-            colors[node] == previous_color
-            if node in colors
-            else recur_call(node, not previous_color)
+            True
+            if not q
+            else False
+            if not is_only_even_cycles(q.pop(), color)
+            else recur_call_with_early_stopping(q, color)
+            if True
+            else None
         )
 
-    def recur_call(node, this_color):
-        colors[node] = this_color
-        found = False
-        q = deque(graph[node])
-        while q and (not found):
-            found = found or recur(q.pop(), this_color)
-        return found
-
     return reduce(
-        lambda x, y: x or y, [recur(i) for i in graph if not i in colors], False
+        lambda x, y: x and y,
+        [is_only_even_cycles(i) for i in graph if not i in colors],
+        True,
     )
 
 

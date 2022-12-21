@@ -10,28 +10,26 @@
     (sol n dislikes)))
 
 
-(defn sol [n edges]
-  (not (find-odd-cycle n edges)))
+(defn sol [n dislikes]
+  (bi-partite? n dislikes))
 
 
-(defn find-odd-cycle [n edges]
+(defn bi-partite? [n edges]
   (setv colors (dict)
         graph (edge-list-to-dict edges))
 
-  (defn recur [node [previous-color True]]
+  (defn only-even-cycles? [node [color True]]
     (if (in node colors)
-        (= (get colors node) previous-color)
-        (recur-call node (not previous-color))))
+        (= (get colors node) color)
+        (do (setv (get colors node) color)
+            (recur-call-with-early-stopping
+              (deque (get graph node)) (not color)))))
 
-  (defn recur-call [node this-color]
-    (setv (get colors node) this-color
-          found False
-          q (deque (get graph node)))
-    (while (and q (not found))
-      (setv found (or found (recur (q.pop) this-color))))
-    found)
-
-  (reduce (fn [x y] (or x y)) (lfor i graph :if (not (in i colors)) (recur i)) False))
+  (defn recur-call-with-early-stopping [q color]
+    (cond (not q) True
+          (not (only-even-cycles? (q.pop) color)) False
+          True (recur-call-with-early-stopping q color)))
+  (reduce (fn [x y] (and x y)) (lfor i graph :if (not (in i colors)) (only-even-cycles? i)) True))
 
 
 (defn edge-list-to-dict [edges]
