@@ -5,20 +5,18 @@
     (sol prices)))
 
 
-(setv MINIMUM (* 5000 (- 1000)))
+(setv MINIMUM -1000)
 
 
 (defn sol [prices]
-  (setv hold []
-        sold [])
+  (setv hold MINIMUM
+        sold-1 0
+        sold-2 0)
   (for [[d p] (enumerate prices)]
-    (setv sm (if (< d 1)
-                 0
-                 (max (get sold -1) (+ (get hold -1) p)))
-          hm (max (if (< d 1) MINIMUM (get hold -1))
-                  (- (if (< d 2) 0 (get sold -2)) p)))
-    (hold.append hm)
-    (sold.append sm))
-  (get sold -1))
-
-(sol [1])
+    (setv [sold-2
+           sold-1
+           hold]
+          [sold-1
+           (max sold-1 (+ hold p))
+           (max hold (- sold-2 p))]))
+  sold-1)

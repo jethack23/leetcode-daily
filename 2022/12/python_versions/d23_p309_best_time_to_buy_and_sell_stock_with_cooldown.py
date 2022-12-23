@@ -3,18 +3,13 @@ class Solution:
         return sol(prices)
 
 
-MINIMUM = 5000 * -1000
+MINIMUM = -1000
 
 
 def sol(prices):
-    hold = []
-    sold = []
+    hold = MINIMUM
+    sold_1 = 0
+    sold_2 = 0
     for [d, p] in enumerate(prices):
-        sm = 0 if d < 1 else max(sold[-1], hold[-1] + p)
-        hm = max(MINIMUM if d < 1 else hold[-1], (0 if d < 2 else sold[-2]) - p)
-        hold.append(hm)
-        sold.append(sm)
-    return sold[-1]
-
-
-sol([1])
+        [sold_2, sold_1, hold] = [sold_1, max(sold_1, hold + p), max(hold, sold_2 - p)]
+    return sold_1
