@@ -5,13 +5,11 @@
     (sol capacity rocks additionalRocks)))
 
 (defn sol [cs rs adds]
-  (cnt-full-bags (vacancy cs rs) adds))
-
-(defn vacancy [cs rs]
-  (sorted (lfor [c s] (zip cs rs) (- c s)) :reverse True))
-
-(defn cnt-full-bags [vs adds [cnt 0]]
-  (if (or (not vs)
-          (< adds (get vs -1)))
-      cnt
-      (cnt-full-bags vs (- adds (vs.pop)) (+ cnt 1))))
+  (setv cnt 0)
+  (for [[i r] (enumerate rs)]
+    (-= (get cs i) r))
+  (cs.sort :reverse True)
+  (while (and cs (<= (get cs -1) adds))
+    (-= adds (cs.pop))
+    (+= cnt 1))
+  cnt)
