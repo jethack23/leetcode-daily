@@ -5,32 +5,32 @@
     (sol pattern s)))
 
 (defn sol [p s]
-  (check-pattern (list p) (s.split) {} {}))
+  (check-pattern (list p) (s.split) {} (set)))
 
-(defn check-pattern [p s inj surj]
-  (cond
+(defn check-pattern [p s inj range-set]
+  (defn recur [p s]
+    (cond
 
-    (or (not p) (not s))
-    (and (not p) (not s))
+      (not p)
+      True
 
-    (or (in (get p -1) inj)
-        (in (get s -1) surj))
-    (if (bijection-check (p.pop) (s.pop) inj surj)
-        (check-pattern p s inj surj)
-        False)
+      (in (get p -1) inj)
+      (if (= (get inj (p.pop)) (s.pop))
+          (recur p s)
+          False)
 
-    True
-    (do (mem-update (p.pop) (s.pop) inj surj)
-        (check-pattern p s inj surj))))
+      (in (get s -1) range-set)
+      False
 
+      True
+      (do (mem-update (p.pop) (s.pop))
+          (recur p s))))
 
-(defn bijection-check [pe se inj surj]
-  (and (in pe inj)
-       (= (get inj pe) se)
-       (in se surj)
-       (= (get surj se) pe)))
-
-(defn mem-update [pe se inj surj]
-  (inj.update {pe se})
-  (surj.update {se pe}))
+  (defn mem-update [pe se]
+    (inj.update {pe se})
+    (range-set.add se))
+  
+  (if (= (len p) (len s))
+      (recur p s)
+      False))
 
