@@ -7,16 +7,15 @@ def sol(ts):
     return min_rnds(Counter(ts).values())
 
 
-def min_rnds(lst):
-    def recu(q, rst=0):
-        if not q:
-            _hy_anon_var_1 = rst
+def min_rnds(lst, rst=0):
+    for t in lst:
+        if t < 2:
+            return -1
+            _hy_anon_var_1 = None
         else:
-            fst = q.pop()
-            _hy_anon_var_1 = -1 if fst < 2 else recu(q, rst + rnds(fst))
-        return _hy_anon_var_1
-
-    return recu(deque(lst))
+            rst += rnds(t)
+            _hy_anon_var_1 = None
+    return rst
 
 
 def rnds(t):
