@@ -9,6 +9,10 @@ def sol(gs, cs):
     min_position = 0
     for [i, [g, c]] in enumerate(zip(gs, cs)):
         current_gas += g - c
-        min_position = i + 1 if current_gas < historical_min else min_position
-        historical_min = min(current_gas, historical_min)
+        if current_gas < historical_min:
+            min_position = i + 1
+            historical_min = current_gas
+            _hy_anon_var_1 = None
+        else:
+            _hy_anon_var_1 = None
     return -1 if current_gas < 0 else min_position
