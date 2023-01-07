@@ -5,19 +5,15 @@
     (sol gas cost)))
 
 (defn sol [gs cs]
-  (setv history (travel-log gs cs))
-  (if (< (get history -1) 0)
+  (setv current-gas 0
+        historical-min 0
+        min-position 0)
+  (for [[i [g c]] (enumerate (zip gs cs))]
+    (+= current-gas (- g c))
+    (setv min-position (if (< current-gas historical-min)
+                           (+ i 1)
+                           min-position)
+          historical-min (min current-gas historical-min)))
+  (if (< current-gas 0)
       -1
-      (min-position history)))
-
-(defn travel-log [gs cs]
-  (setv cur (- (gs.pop) (cs.pop))
-        rst [cur])
-  (for [[g c] (zip gs cs)]
-    (+= cur g)
-    (-= cur c)
-    (rst.append cur))
-  rst)
-
-(defn min-position [history]
-  (min (range (len history)) :key (fn [i] (get history i))))
+      min-position))
