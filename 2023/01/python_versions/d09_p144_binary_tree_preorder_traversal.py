@@ -1,6 +1,6 @@
 class Solution:
     def preorderTraversal(self, root):
-        return iter_sol(root)
+        return iter_sol2(root)
 
 
 def recur_sol(root):
@@ -52,3 +52,18 @@ def iter_sol(root):
                 _hy_anon_var_4 = _hy_anon_var_3
             _hy_anon_var_5 = _hy_anon_var_4
     return rst
+
+
+def iter_sol2(root):
+    """follow up: iterative solution
+    second approach"""
+    rst = []
+    st = [root]
+    while st:
+        cur = st.pop()
+        if not cur is None:
+            rst.append(cur.val)
+            st.append(cur.right)
+            _hy_anon_var_6 = st.append(cur.left)
+        else:
+            _hy_anon_var_6 = None

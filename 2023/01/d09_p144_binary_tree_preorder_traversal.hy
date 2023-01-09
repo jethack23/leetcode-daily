@@ -3,7 +3,7 @@
 
 (defclass Solution []
   (defn preorderTraversal [self root]
-    (iter-sol root)))
+    (iter-sol2 root)))
 
 (defn recur-sol [root]
   "trivial recursive solution"
@@ -39,4 +39,17 @@
           (= last-op "right")
           (do (st.pop)
               (setv last-op lr))))
+  rst)
+
+(defn iter-sol2 [root]
+  "follow up: iterative solution
+second approach"
+  (setv rst []
+        st [root])
+  (while st
+    (setv cur (st.pop))
+    (when (not (is cur None))
+      (rst.append cur.val)
+      (st.append cur.right)
+      (st.append cur.left)))
   rst)
