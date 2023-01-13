@@ -3,7 +3,7 @@
     (sol parents s)))
 
 (defn sol [ps ls]
-  (setv g (get-graph ps)
+  (setv g (get-graph ps (len ls))
         rst 0)
   (defn recur [node]
     (nonlocal rst)
@@ -20,8 +20,9 @@
   (recur 0)
   rst)
 
-(defn get-graph [ps]
-  (setv rst (defaultdict list))
-  (for [[n p] (enumerate ps)]
-    (.append (get rst p) n))
+(defn get-graph [ps n]
+  (setv rst (lfor _ (range n) []))
+  (for [[c p] (enumerate ps)]
+    (when (>= p 0)
+      (.append (get rst p) c)))
   rst)

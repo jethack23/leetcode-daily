@@ -4,7 +4,7 @@ class Solution:
 
 
 def sol(ps, ls):
-    g = get_graph(ps)
+    g = get_graph(ps, len(ls))
     rst = 0
 
     def recur(node):
@@ -22,8 +22,8 @@ def sol(ps, ls):
     return rst
 
 
-def get_graph(ps):
-    rst = defaultdict(list)
-    for [n, p] in enumerate(ps):
-        rst[p].append(n)
+def get_graph(ps, n):
+    rst = [[] for _ in range(n)]
+    for [c, p] in enumerate(ps):
+        rst[p].append(c) if p >= 0 else None
     return rst
