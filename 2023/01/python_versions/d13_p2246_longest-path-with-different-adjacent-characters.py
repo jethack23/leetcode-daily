@@ -5,21 +5,21 @@ class Solution:
 
 def sol(ps, ls):
     g = get_graph(ps, len(ls))
-    rst = 0
 
     def recur(node):
-        nonlocal rst
+        max_path = 0
         paths = []
         for c in g[node]:
-            recur(c) if ls[node] == ls[c] else paths.append(recur(c))
+            [sbtr_max_path, sbtr_max_single_path] = recur(c)
+            max_path = max(max_path, sbtr_max_path)
+            paths.append(sbtr_max_single_path) if ls[node] != ls[c] else None
         paths.sort()
         longest = paths.pop() if paths else 0
         second_longest = paths.pop() if paths else 0
-        rst = max(rst, 1 + longest + second_longest)
-        return 1 + longest
+        max_path = max(max_path, 1 + longest + second_longest)
+        return [max_path, 1 + longest]
 
-    recur(0)
-    return rst
+    return recur(0)[0]
 
 
 def get_graph(ps, n):

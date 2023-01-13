@@ -3,22 +3,21 @@
     (sol parents s)))
 
 (defn sol [ps ls]
-  (setv g (get-graph ps (len ls))
-        rst 0)
+  (setv g (get-graph ps (len ls)))
   (defn recur [node]
-    (nonlocal rst)
-    (setv paths [])
+    (setv max-path 0
+          paths [])
     (for [c (get g node)]
-      (if (= (get ls node) (get ls c))
-          (recur c)
-          (paths.append (recur c))))
+      (setv [sbtr-max-path sbtr-max-single-path] (recur c)
+            max-path (max max-path sbtr-max-path))
+      (when (!= (get ls node) (get ls c))
+        (paths.append sbtr-max-single-path)))
     (paths.sort)
     (setv longest (if paths (paths.pop) 0)
           second-longest (if paths (paths.pop) 0)
-          rst (max rst (+ 1 longest second-longest)))
-    (+ 1 longest))
-  (recur 0)
-  rst)
+          max-path (max max-path (+ 1 longest second-longest)))
+    [max-path (+ 1 longest)])
+  (get (recur 0) 0))
 
 (defn get-graph [ps n]
   (setv rst (lfor _ (range n) []))
