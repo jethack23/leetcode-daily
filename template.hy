@@ -8,8 +8,6 @@
   (setv ns (+ "print(sol(*kw2args(" s ")))"))
   `(pys ~ns))
 
-(import collections [defaultdict])
-
 (pys
   "
 
