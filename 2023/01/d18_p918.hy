@@ -25,25 +25,31 @@ class Solution:
 (defn get-psum [nums]
   (setv psum []
         cur 0)
-  (for [_ (range 2)]
-    (for [n nums]
-      (+= cur n)
-      (psum.append cur)))
+  (for [n nums]
+    (+= cur n)
+    (psum.append cur))
   psum)
 
 (defn sol [nums]
-  (setv
-    psum (get-psum nums)
-    hist [[0 -1]]
-    rst (sum nums)
-    l (len nums))
-  (for [[i s] (enumerate psum)]
-    (while (and hist (> (- i (get (get hist 0) 1)) l))
-      (heappop hist))
-    (setv rst (max rst (- s (get (get hist 0) 0))))
-    (heappush hist [s i]))
+  (setv psum (get-psum nums)
+        total (get psum -1)
+        curmin 0
+        curmax (get psum 0)
+        rst curmax)
+  (for [s psum]
+    (setv rst (max rst
+                   (- s curmin)
+                   (+ curmax (- total s)))
+          curmin (min curmin s)
+          curmax (max curmax s)))
   rst)
 
 (comment
-  
+
+  (setv nums [-3 -2 -3])
+  (setv nums [5 -3 5])
+
+  (sol nums)
+  (get-psum nums)
+
   )
