@@ -17,10 +17,13 @@ def sol(nums):
     total = psum[-1]
     curmin = 0
     curmax = psum[0]
-    rst = curmax
+    rst = total
     for s in psum:
-        rst = max(rst, s - curmin, curmax + (total - s))
+        rst = max(rst, s - curmin)
         curmin = min(curmin, s)
+    psum.pop()
+    for s in psum:
+        rst = max(rst, curmax + (total - s))
         curmax = max(curmax, s)
     return rst
 

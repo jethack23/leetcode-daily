@@ -35,12 +35,16 @@ class Solution:
         total (get psum -1)
         curmin 0
         curmax (get psum 0)
-        rst curmax)
+        rst total)
+  ;; not pass the link
+  (for [s psum]
+    (setv rst (max rst (- s curmin))
+          curmin (min curmin s)))
+  ;; must pass the link
+  (psum.pop)
   (for [s psum]
     (setv rst (max rst
-                   (- s curmin)
                    (+ curmax (- total s)))
-          curmin (min curmin s)
           curmax (max curmax s)))
   rst)
 
