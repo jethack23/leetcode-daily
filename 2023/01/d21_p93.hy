@@ -12,7 +12,7 @@
         (do (when (can-add? cur (get s i))
               (recur (+ i 1) (+ cur (get s i)) ip))
             (when (and cur (< (len ip) 3))
-              (recur i "" (+ ip [cur])))))
+              (recur (+ i 1) (get s i) (+ ip [cur])))))
     rst)
   
   (list (map (fn [x] (.join "." x)) (recur 0 "" []))))

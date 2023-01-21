@@ -12,7 +12,9 @@ def sol(s):
             _hy_anon_var_1 = rst.append(ip + [cur]) if len(ip) == 3 else None
         else:
             recur(i + 1, cur + s[i], ip) if is_can_add(cur, s[i]) else None
-            _hy_anon_var_1 = recur(i, "", ip + [cur]) if cur and len(ip) < 3 else None
+            _hy_anon_var_1 = (
+                recur(i + 1, s[i], ip + [cur]) if cur and len(ip) < 3 else None
+            )
         return rst
 
     return list(map(lambda x: ".".join(x), recur(0, "", [])))
