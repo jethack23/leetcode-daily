@@ -20,14 +20,13 @@ class Solution:
 
 
 (defn sol [n trust]
-  (setv trusts (* [0] n)
-        trusted (* [0] n)
+  (setv point (* [0] n)
         rst -1)
   (for [[a b] trust]
-    (+= (get trusts (- a 1)) 1)
-    (+= (get trusted (- b 1)) 1))
-  (for [[i [to by]] (enumerate (zip trusts trusted))]
-    (when (and (= to 0) (= by (- n 1)))
+    (-= (get point (- a 1)) 1)
+    (+= (get point (- b 1)) 1))
+  (for [[i p] (enumerate point)]
+    (when (= p (- n 1))
       (setv rst (+ i 1))
       (break)))
   rst)
