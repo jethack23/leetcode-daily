@@ -27,29 +27,22 @@ class Solution:
                 (% (- x 1) l)))
   [(- l 1 q) col])
 
-(defn coord2idx [x y l]
-  (setv row (- l 1 x)
-        remainder (if (% row 2)
-                      (- l 1 y)
-                      y))
-  (+ 1 (* row l) remainder))
-
 (defn sol [b]
   (setv l (len b)
         q (deque [[1 0]])
         rst -1
         visited (* [False] (+ (* l l) 1)))
   (while q
-    (print q)
     (setv [x s] (q.popleft))
     (for [i (range (+ x 1) (+ x 7))]
       (cond (= i (* l l)) (return (+ s 1))
-            (not (get visited i)) (do (setv (get visited i) True
-                                            [x y] (get-coord i l)
-                                            at-board (get (get b x) y))
-                                      (cond (= at-board -1) (q.append [i (+ s 1)])
-                                            (= at-board (* l l)) (return (+ s 1))
-                                            True (q.append [at-board (+ s 1)]))))))
+            (get visited i) (continue))
+      (setv (get visited i) True
+            [x y] (get-coord i l)
+            at-board (get (get b x) y))
+      (cond (= at-board -1) (q.append [i (+ s 1)])
+            (= at-board (* l l)) (return (+ s 1))
+            True (q.append [at-board (+ s 1)]))))
   
   rst)
 
