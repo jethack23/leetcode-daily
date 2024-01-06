@@ -1,0 +1,54 @@
+;;; version: 0.2.1
+(defmacro leetcode [fnname *examples]
+  (return `(do (class Solution []
+                      (def ~fnname [self *args **kwargs]
+                        (return (solution *args **kwargs))))
+               ~(ife examples
+                     `(list (map (lambda [x] (print (solution *x)))
+                                 [~@examples]))
+                     None))))
+
+(defmacro fn [*body]
+  (return `(lambda ~@body)))
+
+(defmacro cond [*body]
+  (def recur [*body]
+    (= [test then *orelse] body)
+    (if (< (len body) 4)
+        (return `(if ~test ~then ~@orelse))
+        (return `(if ~test ~then ~(recur *orelse)))))
+  (return (recur *body)))
+
+(from bisect [bisect-left
+              bisect-right])
+
+(def solution [ss es ps]
+  (= jobs (sorted (zip ss es ps) :key (fn [x] [(sub x 1) (- (sub x 0)) (- (sub x 2))])))
+  (= ends [])
+  (= profits [])
+  (for [s e p] jobs
+    (if (not ends)
+        (do (ends.append e)
+            (profits.append p)
+            (continue)))
+    (= track-pos (bisect-right ends s))
+    (= save-pos (bisect-left ends e))
+    (= new-profit (+ p (ife (== track-pos 0)
+                            0
+                            (sub profits (- track-pos 1)))))
+    (cond (== save-pos (len ends))
+          (if (> new-profit (sub profits -1))
+              (do (ends.append e)
+                  (profits.append new-profit)))
+          
+          (== (sub ends save-pos) e)
+          (= (sub profits save-pos) (max (sub profits save-pos)
+                                         new-profit))
+          (do (ends.insert save-pos e)
+              (profits.insert save-pos new-profit))))
+  (return (profits.pop)))
+
+(leetcode jobScheduling
+          [[1 2 3 3] [3 4 5 6] [50 10 40 70]]
+          [[1 2 3 4 6] [3 5 10 6 9] [20 20 100 70 60]]
+          [[1 1 1] [2 3 4] [5 6 4]])
