@@ -1,21 +1,26 @@
+from collections import defaultdict
+from functools import cache
+
+
 def solution(nums):
-    lnums = len(nums)
-    if len(set(nums)) == 1:
-        return 2**lnums - 1 - lnums - lnums * (lnums - 1) // 2
-    duos = []
-    sss = []
+    occurence = defaultdict(list)
     for [i, n] in enumerate(nums):
-        news = []
-        for [t, d, l] in sss:
-            if t == n:
-                news.append([n + d, d, l + 1])
-        for [d, t] in duos:
-            if t == n:
-                news.append([n + d, d, 3])
-        sss += news
-        for k in nums[:i]:
-            duos.append([(d := (n - k)), n + d])
-    return len(sss)
+        occurence[n].append(i)
+
+    @cache
+    def dp(i, j):
+        rst = 0
+        d = nums[j] - nums[i]
+        for k in filter(lambda x: x < i, occurence[nums[i] - d]):
+            rst += dp(k, i) + 1
+        return rst
+
+    l = len(nums)
+    rst = 0
+    for i in range(1, l - 1):
+        for j in range(i + 1, l):
+            rst += dp(i, j)
+    return rst
 
 
 class Solution:
