@@ -1,13 +1,14 @@
 def solution(root, low, high):
     def dfs(node):
-        if node is None:
-            return 0
-        elif node.val < low:
-            return dfs(node.right)
-        elif node.val > high:
-            return dfs(node.left)
-        else:
-            return node.val + dfs(node.left) + dfs(node.right)
+        return (
+            0
+            if node is None
+            else dfs(node.right)
+            if node.val < low
+            else dfs(node.left)
+            if node.val > high
+            else node.val + dfs(node.left) + dfs(node.right)
+        )
 
     return dfs(root)
 

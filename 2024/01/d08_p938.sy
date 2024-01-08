@@ -11,20 +11,20 @@
 (defmacro fn [*body]
   (return `(lambda ~@body)))
 
-(defmacro cond [*body]
+(defmacro conde [*body]
   (def recur [*body]
     (= [test then *orelse] body)
     (if (< (len body) 4)
-        (return `(if ~test ~then ~@orelse))
-        (return `(if ~test ~then ~(recur *orelse)))))
+        (return `(ife ~test ~then ~@orelse))
+        (return `(ife ~test ~then ~(recur *orelse)))))
   (return (recur *body)))
 
 (def solution [root low high]
   (def dfs [node]
-    (cond (is node None) (return 0)
-          (< node.val low) (return (dfs node.right))
-          (> node.val high) (return (dfs node.left))
-          (return (+ node.val (dfs node.left) (dfs node.right)))))
+    (return (conde (is node None) 0
+                   (< node.val low) (dfs node.right)
+                   (> node.val high) (dfs node.left)
+                   (+ node.val (dfs node.left) (dfs node.right)))))
   (return (dfs root)))
 
 (leetcode rangeSumBST)
