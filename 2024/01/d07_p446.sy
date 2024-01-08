@@ -1,0 +1,32 @@
+;;; version: 0.2.3
+(defmacro leetcode [fnname *examples]
+  (return `(do (class Solution []
+                      (def ~fnname [self *args **kwargs]
+                        (return (solution *args **kwargs))))
+               ~(ife examples
+                     `(list (map (lambda [x] (print (solution *x)))
+                                 [~@examples]))
+                     None))))
+
+(def solution [nums]
+  (= lnums (len nums))
+  (if (== (len (set nums)) 1)
+      (return (- (** 2 lnums) 1 lnums (// (* lnums (- lnums 1)) 2))))
+  (= duos [])
+  (= sss [])
+  (for [i n] (enumerate nums)
+    (= news [])
+    (for [t d l] sss
+      (if (== t n)
+          (news.append [(+ n d) d (+ l 1)])))
+    (for [d t] duos
+      (if (== t n)
+          (news.append [(+ n d) d 3])))
+    (+= sss news)
+    (for k (sub nums [: _ i])
+      (duos.append [(:= d (- n k)) (+ n d)])))
+  (return (len sss)))
+
+(leetcode numberOfArithmeticSlices
+          [[2 4 6 8 10]]
+          [[7 7 7 7 7]])
