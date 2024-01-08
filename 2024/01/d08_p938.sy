@@ -1,0 +1,30 @@
+;;; version: 0.2.3
+(defmacro leetcode [fnname *examples]
+  (return `(do (class Solution []
+                      (def ~fnname [self *args **kwargs]
+                        (return (solution *args **kwargs))))
+               ~(ife examples
+                     `(list (map (lambda [x] (print (solution *x)))
+                                 [~@examples]))
+                     None))))
+
+(defmacro fn [*body]
+  (return `(lambda ~@body)))
+
+(defmacro cond [*body]
+  (def recur [*body]
+    (= [test then *orelse] body)
+    (if (< (len body) 4)
+        (return `(if ~test ~then ~@orelse))
+        (return `(if ~test ~then ~(recur *orelse)))))
+  (return (recur *body)))
+
+(def solution [root low high]
+  (def dfs [node]
+    (cond (is node None) (return 0)
+          (< node.val low) (return (dfs node.right))
+          (> node.val high) (return (dfs node.left))
+          (return (+ node.val (dfs node.left) (dfs node.right)))))
+  (return (dfs root)))
+
+(leetcode rangeSumBST)
