@@ -18,19 +18,17 @@
   (= occurence (defaultdict list))
   (for [i n] (enumerate nums)
     (.append (sub occurence n) i))
-  (deco cache
-        (def dp [i j]
-          (= rst 0)
-          (= d (- (sub nums j) (sub nums i)))
-          (for k (filter (fn [x] (< x i))
-                         (sub occurence (- (sub nums i) d)))
-            (+= rst (+ (dp k i) 1)))
-          (return rst)))
   (= l (len nums))
+  (= dp [(* [0] l) for _ in (range l)])
   (= rst 0)
   (for i (range 1 (- l 1))
     (for j (range (+ i 1) l)
-      (+= rst (dp i j))))
+      (= t (- (* 2 (sub nums i)) (sub nums j)))
+      (if (in t occurence)
+          (for k (sub occurence t)
+            (if (>= k i) (break))
+            (+= (sub dp i j) (+ (sub dp k i) 1))))
+      (+= rst (sub dp i j))))
   (return rst))
 
 (leetcode numberOfArithmeticSlices

@@ -6,20 +6,18 @@ def solution(nums):
     occurence = defaultdict(list)
     for [i, n] in enumerate(nums):
         occurence[n].append(i)
-
-    @cache
-    def dp(i, j):
-        rst = 0
-        d = nums[j] - nums[i]
-        for k in filter(lambda x: x < i, occurence[nums[i] - d]):
-            rst += dp(k, i) + 1
-        return rst
-
     l = len(nums)
+    dp = [[0] * l for _ in range(l)]
     rst = 0
     for i in range(1, l - 1):
         for j in range(i + 1, l):
-            rst += dp(i, j)
+            t = 2 * nums[i] - nums[j]
+            if t in occurence:
+                for k in occurence[t]:
+                    if k >= i:
+                        break
+                    dp[i][j] += dp[k][i] + 1
+            rst += dp[i][j]
     return rst
 
 
