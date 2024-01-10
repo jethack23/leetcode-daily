@@ -1,0 +1,37 @@
+;;; version: 0.2.3
+(defmacro leetcode [fnname *examples]
+  (return `(do (class Solution []
+                      (def ~fnname [self *args **kwargs]
+                        (return (solution *args **kwargs))))
+               ~(ife examples
+                     `(list (map (lambda [x] (print (solution *x)))
+                                 [~@examples]))
+                     None))))
+
+(defmacro conde [*body]
+  (def recur [*body]
+    (= [test then *orelse] body)
+    (if (< (len body) 4)
+        (return `(ife ~test ~then ~@orelse))
+        (return `(ife ~test ~then ~(recur *orelse)))))
+  (return (recur *body)))
+
+(def solution [root start]
+  (def dfs [node]
+    (if (is node None) (return [0 0 0]))
+    (= [lmax lfound lto-org] (dfs node.left))
+    (= [rmax rfound rto-org] (dfs node.right))
+    ;; WLOG, let's say start is in left side
+    (if rfound
+        (= [[lmax lfound lto-org] [rmax rfound rto-org]]
+           [[rmax rfound rto-org] [lmax lfound lto-org]]))
+    (return (conde lfound
+                   [(max lmax (+ lto-org rmax)) lfound (+ lto-org 1)]
+
+                   (== node.val start)
+                   [(max lmax rmax) 1 1]
+
+                   [(+ 1 (max lmax rmax)) 0 0])))
+  (return (sub (dfs root) 0)))
+
+(leetcode amountOfTime)
